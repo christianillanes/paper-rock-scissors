@@ -1,6 +1,12 @@
 <resources>
     <string name="app_name">Paper Rock Scissors</string>
+    <string name="computers_choice">Computer\'s choice</string>
+    <string name="your_choice">Your choice</string>
+    <string name="you_win">You win</string>
+    <string name="you_lose">You lose</string>
+    <string name="draw">Draw</string>
     <string name="paper">Paper</string>
     <string name="rock">Rock</string>
     <string name="scissors">Scissors</string>
+    <string name="score">Score</string>
 </resources>
