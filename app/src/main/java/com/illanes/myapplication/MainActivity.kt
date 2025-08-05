@@ -22,6 +22,8 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableIntState
 import androidx.compose.runtime.mutableIntStateOf
@@ -53,22 +55,22 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun App(modifier: Modifier = Modifier) {
-    val computerHandOption = rememberSaveable { mutableStateOf(HandOption.PAPER) }
-    val yourHandOption = rememberSaveable { mutableStateOf(HandOption.PAPER) }
-    val gameResult = rememberSaveable { mutableIntStateOf(R.string.draw) }
+    var computerHandOption by rememberSaveable { mutableStateOf(HandOption.PAPER) }
+    var yourHandOption by rememberSaveable { mutableStateOf(HandOption.PAPER) }
+    var gameResult by rememberSaveable { mutableIntStateOf(R.string.draw) }
     val computerScore = rememberSaveable { mutableIntStateOf(0) }
     val yourScore = rememberSaveable { mutableIntStateOf(0) }
 
-    val isCountingDown = remember { mutableStateOf(false) }
-    val counter = remember { mutableIntStateOf(3) }
+    var isCountingDown by remember { mutableStateOf(false) }
+    var counter by remember { mutableIntStateOf(3) }
 
-    LaunchedEffect(isCountingDown.value) {
-        if (isCountingDown.value) {
-            while (counter.intValue > 0) {
+    LaunchedEffect(isCountingDown) {
+        if (isCountingDown) {
+            while (counter > 0) {
                 delay(1000)  // wait 1 second
-                counter.intValue--
+                counter--
             }
-            isCountingDown.value = false // Reset when done
+            isCountingDown = false // Reset when done
         }
     }
 
@@ -97,7 +99,7 @@ fun App(modifier: Modifier = Modifier) {
             Hand(
                 modifier = Modifier
                     .size(100.dp),
-                handOption = computerHandOption.value
+                handOption = computerHandOption
             )
             Text(
                 text = stringResource(id = R.string.score) + ": " + computerScore.intValue,
@@ -108,10 +110,10 @@ fun App(modifier: Modifier = Modifier) {
             HorizontalDivider(thickness = 8.dp)
             Spacer(modifier = Modifier.height(16.dp))
             Text(
-                text = if (isCountingDown.value) {
-                    counter.intValue.toString()
+                text = if (isCountingDown) {
+                    counter.toString()
                 } else {
-                    stringResource(gameResult.intValue)
+                    stringResource(gameResult)
                 },
                 fontSize = 30.sp,
                 fontWeight = FontWeight.Bold,
@@ -128,7 +130,7 @@ fun App(modifier: Modifier = Modifier) {
             Hand(
                 modifier = Modifier
                     .size(100.dp),
-                handOption = yourHandOption.value
+                handOption = yourHandOption
             )
             Text(
                 text = stringResource(id = R.string.score) + ": " + yourScore.intValue,
@@ -145,52 +147,52 @@ fun App(modifier: Modifier = Modifier) {
             ) {
                 Button(
                     onClick = {
-                        counter.intValue = 3
-                        isCountingDown.value = true
-                        yourHandOption.value = HandOption.PAPER
-                        computerHandOption.value = HandOption.entries.random()
-                        gameResult.intValue = getStatus(
-                            yourHandOption.value,
-                            computerHandOption.value
+                        counter = 3
+                        isCountingDown = true
+                        yourHandOption = HandOption.PAPER
+                        computerHandOption = HandOption.entries.random()
+                        gameResult = getStatus(
+                            yourHandOption,
+                            computerHandOption
                         )
-                        updateScore(gameResult.intValue, yourScore, computerScore)
+                        updateScore(gameResult, yourScore, computerScore)
                     },
                     Modifier.width(120.dp),
-                    enabled = !isCountingDown.value
+                    enabled = !isCountingDown
                 ) {
                     Text(stringResource(R.string.paper))
                 }
                 Button(
                     onClick = {
-                        counter.intValue = 3
-                        isCountingDown.value = !isCountingDown.value
-                        yourHandOption.value = HandOption.ROCK
-                        computerHandOption.value = HandOption.entries.random()
-                        gameResult.intValue = getStatus(
-                            yourHandOption.value,
-                            computerHandOption.value
+                        counter = 3
+                        isCountingDown = !isCountingDown
+                        yourHandOption = HandOption.ROCK
+                        computerHandOption = HandOption.entries.random()
+                        gameResult = getStatus(
+                            yourHandOption,
+                            computerHandOption
                         )
-                        updateScore(gameResult.intValue, yourScore, computerScore)
+                        updateScore(gameResult, yourScore, computerScore)
                     },
                     Modifier.width(120.dp),
-                    enabled = !isCountingDown.value
+                    enabled = !isCountingDown
                 ) {
                     Text(stringResource(R.string.rock))
                 }
                 Button(
                     onClick = {
-                        counter.intValue = 3
-                        isCountingDown.value = !isCountingDown.value
-                        yourHandOption.value = HandOption.SCISSORS
-                        computerHandOption.value = HandOption.entries.random()
-                        gameResult.intValue = getStatus(
-                            yourHandOption.value,
-                            computerHandOption.value
+                        counter = 3
+                        isCountingDown = !isCountingDown
+                        yourHandOption = HandOption.SCISSORS
+                        computerHandOption = HandOption.entries.random()
+                        gameResult = getStatus(
+                            yourHandOption,
+                            computerHandOption
                         )
-                        updateScore(gameResult.intValue, yourScore, computerScore)
+                        updateScore(gameResult, yourScore, computerScore)
                     },
                     Modifier.width(120.dp),
-                    enabled = !isCountingDown.value
+                    enabled = !isCountingDown
                 ) {
                     Text(stringResource(R.string.scissors))
                 }
