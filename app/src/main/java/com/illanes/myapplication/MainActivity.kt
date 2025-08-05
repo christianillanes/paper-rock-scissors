@@ -8,19 +8,25 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableIntState
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -31,6 +37,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.illanes.myapplication.ui.theme.MyApplicationTheme
+import kotlinx.coroutines.delay
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -52,12 +59,26 @@ fun App(modifier: Modifier = Modifier) {
     val computerScore = rememberSaveable { mutableIntStateOf(0) }
     val yourScore = rememberSaveable { mutableIntStateOf(0) }
 
+    val isCountingDown = remember { mutableStateOf(false) }
+    val counter = remember { mutableIntStateOf(3) }
+
+    LaunchedEffect(isCountingDown.value) {
+        if (isCountingDown.value) {
+            while (counter.intValue > 0) {
+                delay(1000)  // wait 1 second
+                counter.intValue--
+            }
+            isCountingDown.value = false // Reset when done
+        }
+    }
+
     Scaffold(modifier = modifier.fillMaxSize()) { innerPadding ->
         Column (
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(innerPadding)
+                .verticalScroll(rememberScrollState())
         ) {
             Text(
                 text = stringResource(id = R.string.app_name),
@@ -65,7 +86,9 @@ fun App(modifier: Modifier = Modifier) {
                 modifier = Modifier
                     .align(alignment = Alignment.CenterHorizontally)
             )
+            Spacer(modifier = Modifier.height(16.dp))
             HorizontalDivider(thickness = 2.dp)
+            Spacer(modifier = Modifier.height(32.dp))
             Text(
                 text = stringResource(id = R.string.computers_choice),
                 fontSize = 20.sp,
@@ -81,14 +104,22 @@ fun App(modifier: Modifier = Modifier) {
                 fontSize = 20.sp,
                 modifier = Modifier
             )
-            HorizontalDivider(thickness = 2.dp)
+            Spacer(modifier = Modifier.height(32.dp))
+            HorizontalDivider(thickness = 8.dp)
+            Spacer(modifier = Modifier.height(16.dp))
             Text(
-                text = stringResource(gameResult.intValue),
+                text = if (isCountingDown.value) {
+                    counter.intValue.toString()
+                } else {
+                    stringResource(gameResult.intValue)
+                },
                 fontSize = 30.sp,
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier
             )
-            HorizontalDivider(thickness = 2.dp)
+            Spacer(modifier = Modifier.height(16.dp))
+            HorizontalDivider(thickness = 8.dp)
+            Spacer(modifier = Modifier.height(32.dp))
             Text(
                 text = stringResource(id = R.string.your_choice),
                 fontSize = 20.sp,
@@ -104,7 +135,9 @@ fun App(modifier: Modifier = Modifier) {
                 fontSize = 20.sp,
                 modifier = Modifier
             )
+            Spacer(modifier = Modifier.height(32.dp))
             HorizontalDivider(thickness = 2.dp)
+            Spacer(modifier = Modifier.height(32.dp))
             Row(
                 modifier = Modifier
                     .fillMaxWidth(),
@@ -112,6 +145,8 @@ fun App(modifier: Modifier = Modifier) {
             ) {
                 Button(
                     onClick = {
+                        counter.intValue = 3
+                        isCountingDown.value = true
                         yourHandOption.value = HandOption.PAPER
                         computerHandOption.value = HandOption.entries.random()
                         gameResult.intValue = getStatus(
@@ -120,12 +155,15 @@ fun App(modifier: Modifier = Modifier) {
                         )
                         updateScore(gameResult.intValue, yourScore, computerScore)
                     },
-                    Modifier.width(120.dp)
+                    Modifier.width(120.dp),
+                    enabled = !isCountingDown.value
                 ) {
                     Text(stringResource(R.string.paper))
                 }
                 Button(
                     onClick = {
+                        counter.intValue = 3
+                        isCountingDown.value = !isCountingDown.value
                         yourHandOption.value = HandOption.ROCK
                         computerHandOption.value = HandOption.entries.random()
                         gameResult.intValue = getStatus(
@@ -134,12 +172,15 @@ fun App(modifier: Modifier = Modifier) {
                         )
                         updateScore(gameResult.intValue, yourScore, computerScore)
                     },
-                    Modifier.width(120.dp)
+                    Modifier.width(120.dp),
+                    enabled = !isCountingDown.value
                 ) {
                     Text(stringResource(R.string.rock))
                 }
                 Button(
                     onClick = {
+                        counter.intValue = 3
+                        isCountingDown.value = !isCountingDown.value
                         yourHandOption.value = HandOption.SCISSORS
                         computerHandOption.value = HandOption.entries.random()
                         gameResult.intValue = getStatus(
@@ -148,7 +189,8 @@ fun App(modifier: Modifier = Modifier) {
                         )
                         updateScore(gameResult.intValue, yourScore, computerScore)
                     },
-                    Modifier.width(120.dp)
+                    Modifier.width(120.dp),
+                    enabled = !isCountingDown.value
                 ) {
                     Text(stringResource(R.string.scissors))
                 }
