@@ -33,10 +33,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -94,21 +92,13 @@ fun App(modifier: Modifier = Modifier) {
             Spacer(modifier = Modifier.height(16.dp))
             HorizontalDivider(thickness = 2.dp)
             Spacer(modifier = Modifier.height(32.dp))
-            Text(
-                text = stringResource(id = R.string.computers_choice),
-                fontSize = 20.sp,
-                modifier = Modifier
-            )
-            Hand(
+            Player(
                 modifier = Modifier
                     .size(100.dp),
+                title = R.string.computers_choice,
                 handOption = computerHandOption,
-                isCountingDown = isCountingDown
-            )
-            Text(
-                text = stringResource(id = R.string.score) + ": " + computerScore.intValue,
-                fontSize = 20.sp,
-                modifier = Modifier
+                isCountingDown = isCountingDown,
+                score = computerScore
             )
             Spacer(modifier = Modifier.height(32.dp))
             HorizontalDivider(thickness = 8.dp)
@@ -126,21 +116,13 @@ fun App(modifier: Modifier = Modifier) {
             Spacer(modifier = Modifier.height(16.dp))
             HorizontalDivider(thickness = 8.dp)
             Spacer(modifier = Modifier.height(32.dp))
-            Text(
-                text = stringResource(id = R.string.your_choice),
-                fontSize = 20.sp,
-                modifier = Modifier
-            )
-            Hand(
+            Player(
                 modifier = Modifier
                     .size(100.dp),
+                title = R.string.your_choice,
                 handOption = yourHandOption,
-                isCountingDown = isCountingDown
-            )
-            Text(
-                text = stringResource(id = R.string.score) + ": " + yourScore.intValue,
-                fontSize = 20.sp,
-                modifier = Modifier
+                isCountingDown = isCountingDown,
+                score = yourScore
             )
             Spacer(modifier = Modifier.height(32.dp))
             HorizontalDivider(thickness = 2.dp)
@@ -207,10 +189,12 @@ fun App(modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun Hand(
+fun Player(
     modifier: Modifier = Modifier,
+    title: Int,
     handOption: HandOption = HandOption.PAPER,
-    isCountingDown: MutableState<Boolean>
+    isCountingDown: MutableState<Boolean>,
+    score: MutableIntState
 ) {
     val handIcon = when(handOption) {
         HandOption.PAPER -> R.drawable.paper
@@ -223,6 +207,11 @@ fun Hand(
         HandOption.SCISSORS -> R.string.scissors
     }
 
+    Text(
+        text = stringResource(id = title),
+        fontSize = 20.sp,
+        modifier = Modifier
+    )
     Image(
         painter = if (isCountingDown.value) {
             painterResource(id = R.drawable.question)
@@ -233,7 +222,20 @@ fun Hand(
         modifier = modifier
     )
     Text(
-        text = stringResource(id = handText),
+        text = if (isCountingDown.value) {
+            "?"
+        } else {
+            stringResource(id = handText)
+        },
+        fontSize = 20.sp,
+        modifier = Modifier
+    )
+    Text(
+        text = if (isCountingDown.value) {
+            stringResource(id = R.string.score) + ": ?"
+        } else {
+            stringResource(id = R.string.score) + ": " + score.intValue
+        },
         fontSize = 20.sp,
         modifier = Modifier
     )
