@@ -31,6 +31,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -108,6 +109,21 @@ fun App(modifier: Modifier = Modifier) {
                 },
                 fontSize = 30.sp,
                 fontWeight = FontWeight.Bold,
+                color = if (isCountingDown.value) {
+                    Color.Unspecified
+                } else {
+                    when (gameResult) {
+                        R.string.you_win -> {
+                            Color.Green
+                        }
+                        R.string.you_lose -> {
+                            Color.Red
+                        }
+                        else -> {
+                            Color.Unspecified
+                        }
+                    }
+                },
                 modifier = Modifier
             )
             Spacer(modifier = Modifier.height(16.dp))
