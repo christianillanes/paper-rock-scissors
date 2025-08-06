@@ -165,7 +165,7 @@ fun App(modifier: Modifier = Modifier) {
                 Button(
                     onClick = {
                         counter = 3
-                        isCountingDown = !isCountingDown
+                        isCountingDown = true
                         yourHandOption = HandOption.ROCK
                         computerHandOption = HandOption.entries.random()
                         gameResult = getStatus(
@@ -182,7 +182,7 @@ fun App(modifier: Modifier = Modifier) {
                 Button(
                     onClick = {
                         counter = 3
-                        isCountingDown = !isCountingDown
+                        isCountingDown = true
                         yourHandOption = HandOption.SCISSORS
                         computerHandOption = HandOption.entries.random()
                         gameResult = getStatus(
