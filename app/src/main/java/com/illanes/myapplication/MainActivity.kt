@@ -4,7 +4,6 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -26,14 +25,12 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableIntState
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -186,59 +183,6 @@ fun App(modifier: Modifier = Modifier) {
             }
         }
     }
-}
-
-@Composable
-fun Player(
-    modifier: Modifier = Modifier,
-    title: Int,
-    handOption: HandOption = HandOption.PAPER,
-    isCountingDown: MutableState<Boolean>,
-    score: MutableIntState
-) {
-    val handIcon = when(handOption) {
-        HandOption.PAPER -> R.drawable.paper
-        HandOption.ROCK -> R.drawable.rock
-        HandOption.SCISSORS -> R.drawable.scissors
-    }
-    val handText = when(handOption) {
-        HandOption.PAPER -> R.string.paper
-        HandOption.ROCK -> R.string.rock
-        HandOption.SCISSORS -> R.string.scissors
-    }
-
-    Text(
-        text = stringResource(id = title),
-        fontSize = 20.sp,
-        modifier = Modifier
-    )
-    Image(
-        painter = if (isCountingDown.value) {
-            painterResource(id = R.drawable.question)
-        } else {
-            painterResource(id = handIcon)
-        },
-        contentDescription = stringResource(id = R.string.rock),
-        modifier = modifier
-    )
-    Text(
-        text = if (isCountingDown.value) {
-            "?"
-        } else {
-            stringResource(id = handText)
-        },
-        fontSize = 20.sp,
-        modifier = Modifier
-    )
-    Text(
-        text = if (isCountingDown.value) {
-            stringResource(id = R.string.score) + ": ?"
-        } else {
-            stringResource(id = R.string.score) + ": " + score.intValue
-        },
-        fontSize = 20.sp,
-        modifier = Modifier
-    )
 }
 
 fun getStatus(yourHandOption: HandOption, computerHandOption: HandOption) : Int {
