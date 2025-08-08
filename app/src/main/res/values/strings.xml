@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Paper Rock Scissors</string>
-    <string name="computers_choice">Computer\'s choice</string>
-    <string name="your_choice">Your choice</string>
+    <string name="computers_choice">Computer</string>
+    <string name="your_choice">You</string>
     <string name="you_win">You win</string>
     <string name="you_lose">You lose</string>
     <string name="draw">Draw</string>

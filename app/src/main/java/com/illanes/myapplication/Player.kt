@@ -1,6 +1,8 @@
 package com.illanes.myapplication
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableIntState
@@ -8,6 +10,7 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 @Composable
@@ -24,17 +27,18 @@ fun Player(
         HandOption.ROCK -> R.drawable.rock
         HandOption.SCISSORS -> R.drawable.scissors
     }
-    val handText = when(handOption) {
-        HandOption.PAPER -> R.string.paper
-        HandOption.ROCK -> R.string.rock
-        HandOption.SCISSORS -> R.string.scissors
-    }
+//    val handText = when(handOption) {
+//        HandOption.PAPER -> R.string.paper
+//        HandOption.ROCK -> R.string.rock
+//        HandOption.SCISSORS -> R.string.scissors
+//    }
 
     Text(
         text = stringResource(id = title),
         fontSize = 20.sp,
         modifier = Modifier
     )
+    Spacer(modifier = Modifier.height(8.dp))
     Image(
         painter = if (isCountingDown.value) {
             painterResource(id = R.drawable.question)
@@ -44,15 +48,16 @@ fun Player(
         contentDescription = stringResource(id = R.string.rock),
         modifier = modifier
     )
-    Text(
-        text = if (isCountingDown.value) {
-            ""
-        } else {
-            stringResource(id = handText)
-        },
-        fontSize = 20.sp,
-        modifier = Modifier
-    )
+//    Text(
+//        text = if (isCountingDown.value) {
+//            ""
+//        } else {
+//            stringResource(id = handText)
+//        },
+//        fontSize = 20.sp,
+//        modifier = Modifier
+//    )
+    Spacer(modifier = Modifier.height(8.dp))
     Text(
         text = if (isCountingDown.value) {
             stringResource(id = R.string.score) + ": " + scoreTemp.intValue
