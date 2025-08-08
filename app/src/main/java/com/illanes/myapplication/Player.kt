@@ -16,7 +16,8 @@ fun Player(
     title: Int,
     handOption: HandOption = HandOption.PAPER,
     isCountingDown: MutableState<Boolean>,
-    score: MutableIntState
+    score: MutableIntState,
+    scoreTemp: MutableIntState
 ) {
     val handIcon = when(handOption) {
         HandOption.PAPER -> R.drawable.paper
@@ -45,7 +46,7 @@ fun Player(
     )
     Text(
         text = if (isCountingDown.value) {
-            "?"
+            ""
         } else {
             stringResource(id = handText)
         },
@@ -54,7 +55,7 @@ fun Player(
     )
     Text(
         text = if (isCountingDown.value) {
-            stringResource(id = R.string.score) + ": ?"
+            stringResource(id = R.string.score) + ": " + scoreTemp.intValue
         } else {
             stringResource(id = R.string.score) + ": " + score.intValue
         },

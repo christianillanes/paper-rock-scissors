@@ -27,7 +27,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableIntState
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -59,9 +58,11 @@ fun App(modifier: Modifier = Modifier) {
     var gameResult by rememberSaveable { mutableIntStateOf(R.string.draw) }
     val computerScore = rememberSaveable { mutableIntStateOf(0) }
     val yourScore = rememberSaveable { mutableIntStateOf(0) }
+    var computerScoreTemp = rememberSaveable { mutableIntStateOf(computerScore.intValue) }
+    var yourScoreTemp = rememberSaveable { mutableIntStateOf(yourScore.intValue) }
 
-    val isCountingDown = remember { mutableStateOf(false) }
-    var counter by remember { mutableIntStateOf(3) }
+    val isCountingDown = rememberSaveable { mutableStateOf(false) }
+    var counter by rememberSaveable { mutableIntStateOf(3) }
 
     LaunchedEffect(isCountingDown.value) {
         if (isCountingDown.value) {
@@ -70,6 +71,8 @@ fun App(modifier: Modifier = Modifier) {
                 counter--
             }
             isCountingDown.value = false // Reset when done
+            computerScoreTemp = computerScore
+            yourScoreTemp = yourScore
         }
     }
 
@@ -96,7 +99,8 @@ fun App(modifier: Modifier = Modifier) {
                 title = R.string.computers_choice,
                 handOption = computerHandOption,
                 isCountingDown = isCountingDown,
-                score = computerScore
+                score = computerScore,
+                scoreTemp = computerScoreTemp
             )
             Spacer(modifier = Modifier.height(32.dp))
             HorizontalDivider(thickness = 8.dp)
@@ -135,7 +139,8 @@ fun App(modifier: Modifier = Modifier) {
                 title = R.string.your_choice,
                 handOption = yourHandOption,
                 isCountingDown = isCountingDown,
-                score = yourScore
+                score = yourScore,
+                scoreTemp = yourScoreTemp
             )
             Spacer(modifier = Modifier.height(32.dp))
             HorizontalDivider(thickness = 2.dp)
@@ -155,7 +160,13 @@ fun App(modifier: Modifier = Modifier) {
                             yourHandOption,
                             computerHandOption
                         )
-                        updateScore(gameResult, yourScore, computerScore)
+                        updateScore(
+                            gameResult,
+                            yourScore,
+                            computerScore,
+                            yourScoreTemp,
+                            computerScoreTemp
+                        )
                     },
                     Modifier.width(120.dp),
                     enabled = !isCountingDown.value
@@ -172,7 +183,13 @@ fun App(modifier: Modifier = Modifier) {
                             yourHandOption,
                             computerHandOption
                         )
-                        updateScore(gameResult, yourScore, computerScore)
+                        updateScore(
+                            gameResult,
+                            yourScore,
+                            computerScore,
+                            yourScoreTemp,
+                            computerScoreTemp
+                        )
                     },
                     Modifier.width(120.dp),
                     enabled = !isCountingDown.value
@@ -189,7 +206,13 @@ fun App(modifier: Modifier = Modifier) {
                             yourHandOption,
                             computerHandOption
                         )
-                        updateScore(gameResult, yourScore, computerScore)
+                        updateScore(
+                            gameResult,
+                            yourScore,
+                            computerScore,
+                            yourScoreTemp,
+                            computerScoreTemp
+                        )
                     },
                     Modifier.width(120.dp),
                     enabled = !isCountingDown.value
@@ -220,7 +243,16 @@ fun getStatus(yourHandOption: HandOption, computerHandOption: HandOption) : Int 
     return result
 }
 
-fun updateScore(state: Int, yourScore: MutableIntState, computerScore: MutableIntState) {
+fun updateScore(
+    state: Int,
+    yourScore: MutableIntState,
+    computerScore: MutableIntState,
+    yourScoreTemp: MutableIntState,
+    computerScoreTemp: MutableIntState
+) {
+    yourScoreTemp.intValue = yourScore.intValue
+    computerScoreTemp.intValue = computerScore.intValue
+
     if (state == R.string.you_win) {
         yourScore.intValue += 1
     } else if (state == R.string.you_lose) {
