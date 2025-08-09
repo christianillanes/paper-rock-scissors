@@ -96,7 +96,7 @@ fun App(modifier: Modifier = Modifier) {
             Player(
                 modifier = Modifier
                     .size(100.dp),
-                title = R.string.computers_choice,
+                title = R.string.computer,
                 handOption = computerHandOption,
                 isCountingDown = isCountingDown,
                 score = computerScore,
@@ -136,7 +136,7 @@ fun App(modifier: Modifier = Modifier) {
             Player(
                 modifier = Modifier
                     .size(100.dp),
-                title = R.string.your_choice,
+                title = R.string.you,
                 handOption = yourHandOption,
                 isCountingDown = isCountingDown,
                 score = yourScore,
